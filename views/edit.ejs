@@ -1,11 +1,103 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Edit Post</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Post - <%= post.title %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Edit Blog Post</h1>
-    <!-- Form to edit an existing post -->
+<body class="bg-light">
+  <div class="container mt-5">
+    <div class="card shadow p-4">
+      <h2 class="mb-4">Edit Blog Post</h2>
+      <form action="/update/<%= post.id %>" method="POST" enctype="multipart/form-data">
+
+        <!-- Title -->
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="title" 
+            name="title" 
+            value="<%= post.title %>" 
+            required>
+        </div>
+
+        <!-- Author -->
+        <div class="mb-3">
+          <label for="author" class="form-label">Author</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="author" 
+            name="author" 
+            value="<%= post.author %>" 
+            required>
+        </div>
+
+        <!-- Date -->
+        <div class="mb-3">
+          <label for="date" class="form-label">Date</label>
+          <input 
+            type="date" 
+            class="form-control" 
+            id="date" 
+            name="date" 
+            value="<%= post.date %>" 
+            required>
+        </div>
+
+        <!-- Current Image Preview -->
+        <% if (post.image) { %>
+          <div class="mb-3">
+            <p>Current Image:</p>
+            <img src="<%= post.image %>" class="img-fluid mb-2" style="max-height:200px;">
+          </div>
+        <% } %>
+
+        <!-- Upload New Picture -->
+        <div class="mb-3">
+          <label for="picture" class="form-label">Change Picture (optional)</label>
+          <input type="file" class="form-control" id="picture" name="picture">
+        </div>
+
+        <!-- Content -->
+        <div class="mb-3">
+          <label for="content" class="form-label">Content</label>
+          <textarea 
+            class="form-control" 
+            id="content" 
+            name="content" 
+            rows="6" 
+            required><%= post.description %></textarea>
+        </div>
+
+        <!-- Category -->
+        <div class="mb-3">
+          <label for="category" class="form-label">Category</label>
+          <select class="form-select" id="category" name="category" required>
+            <option value="">-- Select Category --</option>
+            <option value="Technology" <%= post.tags.includes("Technology") ? "selected" : "" %>>Technology</option>
+            <option value="Education" <%= post.tags.includes("Education") ? "selected" : "" %>>Education</option>
+            <option value="Health" <%= post.tags.includes("Health") ? "selected" : "" %>>Health</option>
+            <option value="Lifestyle" <%= post.tags.includes("Lifestyle") ? "selected" : "" %>>Lifestyle</option>
+            <option value="Business" <%= post.tags.includes("Business") ? "selected" : "" %>>Business</option>
+            <option value="Entertainment" <%= post.tags.includes("Entertainment") ? "selected" : "" %>>Entertainment</option>
+          </select>
+        </div>
+
+        <!-- Buttons -->
+        <button type="submit" class="btn btn-primary">Update Post</button>
+        <a href="/post/<%= post.id %>" class="btn btn-secondary">Cancel</a>
+      </form>
+
+      <!-- Success feedback (flash-style, handled after update in backend) -->
+      <% if (typeof successMessage !== "undefined") { %>
+        <div class="alert alert-success mt-3"><%= successMessage %></div>
+      <% } %>
+    </div>
+  </div>
 </body>
 </html>
+

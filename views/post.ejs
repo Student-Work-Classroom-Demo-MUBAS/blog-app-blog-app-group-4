@@ -41,7 +41,15 @@
     <img src="<%= post.image %>" class="post-image" alt="<%= post.title %>">
 
     <p class="text-center text-secondary mb-4"><%= post.description %></p>
-    
+     <!-- Edit & Delete Buttons -->
+    <div class="text-center">
+      <a href="/edit/<%= post.id %>" class="btn btn-warning me-2">Edit</a>
+      <form action="/delete/<%= post.id %>" method="POST" style="display:inline;">
+        <button type="submit" class="btn btn-danger">Delete</button>
+      </form>
+    </div>
+
+  </div> <!-- end container -->
 
   </div>
 

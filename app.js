@@ -6,6 +6,8 @@ import multer from "multer";
 const app = express();
 const port = 3000;
 
+app.set("view engine", "ejs");
+
 
 // Get the current file path
 // const __filename = fileURLToPath(import.meta.url);
@@ -32,14 +34,14 @@ const upload = multer({ storage: storage });
 app.use('/uploads', express.static('uploads'));
 let posts = [
 
-//      {
-//     id: 1,
-//     author: "Phoenix Baker",
-//     date: "19 Jan 2025",
-//     title: "Migrating to Linear 101",
-//     description: "Linear helps streamline software projects, sprints, tasks, and bug tracking. Here’s how to get started.",
-//     tags: ["Product", "Tools", "SaaS"],
-//     image: "https://via.placeholder.com/600x400?text=Linear+101"
+    // {
+     //id: 1,
+     //author: "Phoenix Baker",
+     //date: "19 Jan 2025",
+     //title: "Migrating to Linear 101",
+     //description: "Linear helps streamline software projects, sprints, tasks, and bug tracking. Here’s how to get started.",
+    // tags: ["Product", "Tools", "SaaS"],
+  //   image: "https://via.placeholder.com/600x400?text=Linear+101"
 //   },
 //   {
 //     id: 2,
@@ -108,6 +110,51 @@ app.get("/post/:id", (req, res) => {
   res.render("post.ejs", { post });  // Renders views/post.ejs
 });
 
+app.get("/edit/:id", (req, res) => {
+  const postId = parseInt(req.params.id);
+  const post = posts.find(p => p.id === postId);
+
+  if (!post) {
+    return res.status(404).send("Post not found");
+  }
+
+  res.render("edit.ejs", { post });  // ✅ Now renders edit.ejs
+});
+
+
+
+// update route
+app.post("/update/:id", upload.single("picture"), (req, res) => {
+  const postId = parseInt(req.params.id);
+  const post = posts.find(p => p.id === postId);
+
+  if (!post) {
+    return res.status(404).send("Post not found");
+  }
+
+  // Update the post
+  post.title = req.body.title;
+  post.author = req.body.author;
+  post.date = req.body.date;
+  post.description = req.body.content;
+  post.tags = [req.body.category];
+
+  // If a new picture is uploaded, replace the old one
+  if (req.file) {
+    post.image = `/uploads/${req.file.filename}`;
+  }
+
+  console.log(`Post ${postId} updated:`, post);
+  res.redirect("/"); // Back to homepage
+});
+
+// Delete route
+app.post("/delete/:id", (req, res) => {
+  const postId = parseInt(req.params.id);
+  posts = posts.filter(p => p.id !== postId);
+  res.redirect("/");
+});
+
 
 app.post("/add-post", upload.single("picture"), (req, res) => {
   const { title, author, date, content, category } = req.body;
@@ -135,10 +182,10 @@ app.post("/add-post", upload.single("picture"), (req, res) => {
 //   res.redirect("/posts");
 });
 
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
 
 
-// app.set("view engine", "ejs");
