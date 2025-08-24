@@ -151,7 +151,9 @@ app.post("/update/:id", upload.single("picture"), (req, res) => {
 // Delete route
 app.post("/delete/:id", (req, res) => {
   const postId = parseInt(req.params.id);
+  console.log("Trying to delete post:", postId, "Current posts:", posts);
   posts = posts.filter(p => p.id !== postId);
+  console.log("Remaining posts:", posts);
   res.redirect("/");
 });
 

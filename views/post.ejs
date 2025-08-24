@@ -44,10 +44,15 @@
      <!-- Edit & Delete Buttons -->
     <div class="text-center">
       <a href="/edit/<%= post.id %>" class="btn btn-warning me-2">Edit</a>
-      <form action="/delete/<%= post.id %>" method="POST" style="display:inline;">
-        <button type="submit" class="btn btn-danger">Delete</button>
-      </form>
-    </div>
+      <button class="btn btn-danger" onclick="deletePost(<%= post.id %>)">Delete</button>
+
+<script>
+  function deletePost(id) {
+    fetch(`/delete/${id}`, { method: 'POST' })
+      .then(() => window.location.href = '/')
+      .catch(err => alert('Delete failed: ' + err));
+  }
+</script>
 
   </div> <!-- end container -->
 
