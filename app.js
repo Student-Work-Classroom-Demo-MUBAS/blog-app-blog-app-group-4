@@ -96,6 +96,10 @@ app.get("/", (req, res) => {
 app.get("/create", (req, res) => {
   res.render("create.ejs",);
 });
+// About page route
+app.get('/about', (req, res) => {
+  res.render('about');
+});
 
 
 
