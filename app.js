@@ -30,34 +30,97 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 app.use('/uploads', express.static('uploads'));
-let posts = [];
+let posts = [
+
+//      {
+//     id: 1,
+//     author: "Phoenix Baker",
+//     date: "19 Jan 2025",
+//     title: "Migrating to Linear 101",
+//     description: "Linear helps streamline software projects, sprints, tasks, and bug tracking. Here’s how to get started.",
+//     tags: ["Product", "Tools", "SaaS"],
+//     image: "https://via.placeholder.com/600x400?text=Linear+101"
+//   },
+//   {
+//     id: 2,
+//     author: "Lana Steiner",
+//     date: "18 Jan 2025",
+//     title: "Building your API stack",
+//     description: "The rise of RESTful APIs has been met by a rise in tools for creating, testing, and managing them.",
+//     tags: ["Software Development", "Tools"],
+//     image: "https://via.placeholder.com/600x400?text=API+Stack"
+//   },
+//   {
+//     id: 3,
+//     author: "Alec Whitten",
+//     date: "17 Jan 2025",
+//     title: "Bill Walsh leadership lessons",
+//     description: "Like to know the secrets of transforming a 2-14 team into a 3x Super Bowl winning Dynasty?",
+//     tags: ["Leadership", "Management"],
+//     image: "https://via.placeholder.com/600x400?text=Leadership"
+//   },
+//   {
+//     id: 4,
+//     author: "Demi Wilkinson",
+//     date: "16 Jan 2025",
+//     title: "PM mental models",
+//     description: "Mental models are simple expressions of complex processes or relationships.",
+//     tags: ["Product", "Research", "Frameworks"],
+//     image: "https://via.placeholder.com/600x400?text=PM+Models"
+//   },
+//   {
+//     id: 5,
+//     author: "Candice Wu",
+//     date: "15 Jan 2025",
+//     title: "What is wireframing?",
+//     description: "Introduction to Wireframing and its Principles. Learn from the best in the industry.",
+//     tags: ["Design", "Research"],
+//     image: "https://via.placeholder.com/600x400?text=Wireframing"
+//   },
+//   {
+//     id: 6,
+//     author: "Natalie Craig",
+//     date: "14 Jan 2025",
+//     title: "How collaboration makes us better designers",
+//     description: "Collaboration can make our teams stronger, and our individual designs better.",
+//     tags: ["Design", "Research"],
+//     image: "https://via.placeholder.com/600x400?text=Collaboration"
+//   }
+];
 app.get("/", (req, res) => {
-  
-  res.render("index.ejs");
+  res.render("index.ejs", { posts });
 });
 
 app.get("/create", (req, res) => {
-  res.render("create.ejs");
+  res.render("create.ejs",);
 });
 
 
 
-// app.post("/add-post", (req, res) => {
-  
-//   res.render("create.ejs");
-// });
+app.get("/post/:id", (req, res) => {
+  const postId = parseInt(req.params.id);
+  const post = posts.find(p => p.id === postId);
+
+  if (!post) {
+    return res.status(404).send("Post not found");
+  }
+
+  res.render("post.ejs", { post });  // Renders views/post.ejs
+});
+
+
 app.post("/add-post", upload.single("picture"), (req, res) => {
   const { title, author, date, content, category } = req.body;
 
   // Create a new post object
   const newPost = {
     id: posts.length + 1,
-    title,
-    author,
-    date,
-    picture: req.file ? `/uploads/${req.file.filename}` : null, // save filename if uploaded
-    content,
-    category,
+     title: title,
+    author: author,
+    date: date,
+    image: req.file ? `/uploads/${req.file.filename}` : null, // save filename if uploaded
+    description: content,
+    tags: [category],
   };
 
   // Add it to the array
@@ -67,7 +130,9 @@ app.post("/add-post", upload.single("picture"), (req, res) => {
   console.log("All Posts:", posts);
 
   // Redirect to a page showing all posts (or back to form)
-  res.redirect("/posts");
+  res.redirect("/");
+
+//   res.redirect("/posts");
 });
 
 app.listen(port, () => {
