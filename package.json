@@ -13,9 +13,9 @@
     "body-parser": "^2.2.0",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
+    "locals": "^0.0.4",
     "multer": "^2.0.2"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Student-Work-Classroom-Demo-MUBAS/blog-app-blog-app-group-4.git"
